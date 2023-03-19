@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.happyjob.study.tut.dao.CounselDAO">
+	
+	<!-- 학생 목록 조회 -->
+	<select id="counselStudentList" resultType="kr.happyjob.study.tut.model.CounselModel">
+		/* kr.happyjob.study.tut.dao.CounselDao.counselStudentList */
+		select  co.lecture_seq as lecture_seq
+      		  , consultant_no
+   			  , co.loginID as tchLoginID
+    		  , consultant_name
+    		  , consultant_content
+    		  , consultant_counsel
+    		  , consultant_date
+    		  , ui.name as teacherName
+    		  , st.loginID as stuLoginID
+    		  , dc.detail_name as lecture_Name
+  		from consultant co
+    		inner join tb_lecture lc ON lc.lecture_seq = co.lecture_seq
+    		inner join tb_student st on lc.lecture_seq = st.lecture_seq
+    		inner join tb_userinfo ui ON ui.loginID =lc.loginID
+    		inner join tb_detail_code dc on dc.group_code = 'lecture_no' and dc.detail_code = lc.lecture_no
+    	where co.loginID = #{loginID} 
+		
+		order by consultant_no desc
+		LIMIT #{startPage}, #{pageSize}
+	</select>
+	
+	<!-- 학생 목록 조회 카운트 -->
+	<select id="counselStudentListCnt" resultType="int">
+		/* kr.happyjob.study.tut.dao.TaskDao.counselStudentListCnt */
+		select  count(*)
+  		from consultant co
+    		inner join tb_lecture lc ON lc.lecture_seq = co.lecture_seq
+    		inner join tb_student st on lc.lecture_seq = st.lecture_seq
+    		inner join tb_userinfo ui ON ui.loginID =lc.loginID
+    		inner join tb_detail_code dc on dc.group_code = 'lecture_no' and dc.detail_code = lc.lecture_no 
+	</select>
+	
+</mapper>

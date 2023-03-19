@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.happyjob.study.tut.dao.TaskDao">
+	
+	<!-- 강의 목록 조회 -->
+	<select id="lectureList" resultType="kr.happyjob.study.tut.model.LectureModel">
+		/* kr.happyjob.study.tut.dao.TaskDao.lectureList */
+		
+		select le.lecture_no as lectureNo
+		      ,le.loginID as loginId
+		      ,dc.detail_name as roomNo
+		      ,le.lecture_person as lecturePerson
+		      ,le.lecture_start as lectureStart
+		      ,le.lecture_end as lectureEnd
+		      ,us.name as tutName
+          	  ,ledc.detail_name as lectureName
+		 from tb_lecture le 
+		      inner join tb_room rm on rm.lecture_no = le.lecture_no
+		      inner join tb_userinfo us on us.loginId = le.loginId
+		      inner join tb_detail_code dc on dc.group_code = 'number' and dc.detail_code = rm.number
+          	  inner join tb_detail_code ledc on ledc.group_code = 'lecture_no' and ledc.detail_code = le.lecture_no
+	    where le.loginID = #{loginid}
+			<if test="(lectureNo != null) and (!lectureNo.equals(''))">
+				and le.lecture_no = #{lectureNo}
+			</if> 
+		LIMIT #{startNum}, #{pageSize}
+	</select>
+	
+	<select id="lectureListCnt" resultType="int">
+		/* kr.happyjob.study.tut.dao.TaskDao.lectureListCnt */
+		
+		select count(*)
+		 from tb_lecture le 
+		 	  inner join tb_detail_code dc on dc.group_code = 'lecture_no' and dc.detail_code = le.lecture_no
+	    where le.loginID = #{loginid}
+			<if test="(lectureNo != null) and (!lectureNo.equals(''))">
+				and le.lecture_no = #{lectureNo}
+			</if>  
+	</select>
+	
+		
+	<!-- 과제관리 목록 조회 -->
+	<select id="taskList" resultType="kr.happyjob.study.tut.model.TaskModel">
+		/* kr.happyjob.study.tut.dao.TaskDao.taskList */
+		
+        select ts.lecture_no as lectureNo
+              ,ts.task_no as taskNo
+              ,ts.task_title as taskTitle
+              ,ts.task_start as taskStart
+              ,ts.task_end as taskEnd
+         from tb_task ts
+        where ts.lecture_no = #{lectureNo}
+        LIMIT #{startNum}, #{pageSize}
+	</select>
+	
+	<!-- 목록수 -->
+	<select id="taskListCnt" resultType="int">
+		/* kr.happyjob.study.tut.dao.TaskDao.taskListCnt */
+		
+		select count(*)
+		 from tb_task ts
+	      where ts.lecture_no = #{lectureNo}
+	</select>
+	
+	<!-- 과제 상세조회 -->
+	<select id="taskDetail" resultType="kr.happyjob.study.tut.model.TaskModel">
+		/* kr.happyjob.study.tut.dao.TaskDao.taskDetail */
+		
+        select ts.lecture_no as lectureNo
+              ,ts.task_no as taskNo
+              ,ts.task_title as taskTitle
+              ,ts.task_content as taskContent
+              ,ts.task_start as taskStart
+              ,ts.task_end as taskEnd
+              ,ts.task_name as taskName
+              ,ts.task_non as taskNon
+              ,ts.task_mul as taskMul
+         from tb_task ts
+        where ts.lecture_no = #{lectureNo}
+          and ts.task_no = ${taskNo}
+	</select>
+	
+	<!-- 제출 명단  -->
+	<select id="tasksendinfo" resultType="kr.happyjob.study.tut.model.TaskSendModel">
+		/* kr.happyjob.study.tut.dao.TaskDao.tasksendinfo */
+		
+		select sn.send_no as sendNo
+              ,sn.task_no as taskNo
+              ,sn.send_title as sendTitle
+              ,us.name as stdName
+         from tb_send sn
+              inner join tb_userinfo us on us.loginId = sn.loginID
+        where sn.task_no = ${taskNo}       
+	</select>
+</mapper>

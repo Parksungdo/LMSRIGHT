@@ -1,0 +1,53 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>					
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+
+
+
+	
+		<dl>
+			<dt>
+				<strong>설문 조사</strong>
+			</dt>
+			<dd class="content">
+				<!-- s : 여기에 내용입력 -->
+				<table class="row">
+					<caption>caption</caption>
+					<colgroup>
+						<col width="50%">
+						<col width="50%">
+					</colgroup>
+
+					<tbody>
+					<c:forEach items="${surveyQuestionList}" var="list">
+						<tr>
+							<th scope="row">Q${list.serveyitem_queno}. ${list.serveyitem_question}</th>
+							<td>
+								<input type="radio" id="radio1-1" name="use_yn1" id="use_yn_1" /> 
+									<label for="radio1-1">${list.serveyitem_que_one}</label><br>
+								<input type="radio" id="radio2-1" name="use_yn2" id="use_yn_2"  /> 
+									<label for="radio2-1">${list.serveyitem_que_two}</label><br>
+								<input type="radio" id="radio3-1" name="use_yn3" id="use_yn_3"  /> 
+									<label for="radio3-1">${list.serveyitem_que_three}</label><br>
+								<input type="radio" id="radio4-1" name="use_yn4" id="use_yn_4"  /> 
+									<label for="radio4-1">${list.serveyitem_que_four}</label><br>
+								<input type="radio" id="radio5-1" name="use_yn5" id="use_yn_5"  /> 
+									<label for="radio5-1">${list.serveyitem_que_five}</label>
+							</td>
+						</tr>
+					</c:forEach>
+					</tbody>
+				</table>
+				
+				<!-- e : 여기에 내용입력 -->
+
+				<div class="btn_areaC mt30">
+					<a href=""	class="btnType gray"  id="btnCloseModal" name="btn"><span>취소</span></a>
+				</div>
+			</dd>
+		</dl>
+		<a href="" class="closePop"><span class="hidden">닫기</span></a>
+	
+
+	<!--// 모달팝업 -->

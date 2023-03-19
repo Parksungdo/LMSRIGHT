@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.happyjob.study.std.dao.StdTestDao">
+
+   <!-- 수강 목록 조회 -->
+   <select id="testLectureList" resultType="kr.happyjob.study.std.model.StdTestModel">
+      /*kr.happyjob.study.std.dao.LectureListDAO.testLectureList*/      
+      select  (@rownum := @rownum + 1) as num
+      		, st.lecture_seq
+      		, dc.detail_name as lecture_name
+      		, lc.loginID
+      		, ui.name
+      		, lc.lecture_start
+      		, lc.lecture_end
+      		, st.student_test
+      		, sum(a.score) as 'score'
+ 	 from (select @rownum := 0) tmp, tb_student st
+      	inner join tb_lecture lc ON lc.lecture_seq = st.lecture_seq
+      	inner join tb_userinfo ui on ui.loginID = lc.loginID
+      	inner join tb_detail_code dc on dc.group_code = 'lecture_no' and dc.detail_code = lc.lecture_no
+    	left outer join (
+                      	 select st.lecture_seq
+                              , st.loginID
+                              , ui.name
+                              , tl.lecture_start
+                              , tl.lecture_end
+                              , st.student_test
+                              , case when tr.result_answer = tq.question_answer
+                                     then tq.question_score
+                                     else 0
+                                     end 'score'
+                        from tb_lecture tl
+                          left outer join tb_result tr on tr.lecture_seq = tl.lecture_seq
+                          left outer join tb_question tq on tq.test_no = tl.test_no
+                          inner join tb_student st on st.lecture_seq = tl.lecture_seq
+                          inner join tb_userinfo ui on ui.loginID = st.loginID
+                        group by tl.lecture_seq
+                    ) a on st.lecture_seq = a.lecture_seq
+    
+   		where st.loginID = 'student' and st.student_lecture = 'Y'
+    	group by st.lecture_seq
+    	order by num asc
+       LIMIT #{StratNum}, #{pageSize}
+   </select>
+   
+   <!-- 수강 목록 총 갯수 조회 -->
+   <select id="testLectureListCnt" resultType="int">
+      /*kr.happyjob.study.std.dao.LectureListDAO.lectureListCnt*/      
+     select   count(DISTINCT st.lecture_seq)
+  		from (select @rownum := 0) tmp, tb_student st
+      	inner join tb_lecture lc ON lc.lecture_seq = st.lecture_seq
+      	inner join tb_userinfo ui on ui.loginID = lc.loginID
+      	inner join tb_detail_code dc on dc.group_code = 'lecture_no' and dc.detail_code = lc.lecture_no
+    	left outer join (
+                      	 select st.lecture_seq
+                              , st.loginID
+                              , ui.name
+                              , tl.lecture_start
+                              , tl.lecture_end
+                              , st.student_test
+                              , case when tr.result_answer = tq.question_answer
+                                     then tq.question_score
+                                     else 0
+                                     end 'score'
+                        from tb_lecture tl
+                          left outer join tb_result tr on tr.lecture_seq = tl.lecture_seq
+                          left outer join tb_question tq on tq.test_no = tl.test_no
+                          inner join tb_student st on st.lecture_seq = tl.lecture_seq
+                          inner join tb_userinfo ui on ui.loginID = st.loginID
+                        group by tl.lecture_seq
+                    ) a on st.lecture_seq = a.lecture_seq
+    
+   		where st.loginID = 'student' and st.student_lecture = 'Y'
+   </select>
+   
+   <!-- 시험 문제 불러오기 -->
+   <select id="testQuestion" resultType="kr.happyjob.study.std.model.StdTestModel">
+      /*kr.happyjob.study.std.dao.LectureListDAO.testQuestion*/      
+      select  qu.question_no
+      		, qu.question_ex
+      		, qu.question_one
+      		, qu.question_two
+      		, qu.question_three
+      		, qu.question_four
+      		, qu.test_no
+      		, lc.lecture_seq
+	  from tb_lecture lc 
+		  inner join tb_question qu on lc.test_no = qu.test_no
+	  where lc.lecture_seq = #{lecture_seq}
+   </select>
+   
+   <!-- 시험 문제 총 갯수 조회 -->
+   <select id="testQuestionCnt" resultType="int">
+      /*kr.happyjob.study.std.dao.LectureListDAO.testQuestionCnt*/      
+     select   count(*)
+  		from tb_lecture lc 
+		  inner join tb_question qu on lc.test_no = qu.test_no
+	  where lc.lecture_seq = #{lecture_seq}
+   </select>
+   
+   <insert id="saveQuestion">
+   	insert into tb_result
+				(   lecture_seq
+				  , test_no
+				  , loginID
+				  , question_no
+				  , result_answer
+				)
+		values (
+					#{lecture_seq}
+				  , #{test_no}
+				  , #{loginID}
+				  , #{question_no}
+				  , #{result_answer}
+				)
+   </insert>
+   
+   <update id="updateStudent">
+   	update tb_student
+			set student_test = 'Y'
+		where loginID = #{loginID} and lecture_seq = #{lecture_seq}
+   
+   </update>
+   
+</mapper>

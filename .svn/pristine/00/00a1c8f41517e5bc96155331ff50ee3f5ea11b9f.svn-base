@@ -1,0 +1,51 @@
+package kr.happyjob.study.std.service;
+
+import java.util.List;
+import java.util.Map;
+
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+
+import kr.happyjob.study.std.dao.UserUpdateDao;
+import kr.happyjob.study.std.model.UserUpdateModel;
+
+
+@Service
+public class UserUpdateServiceimpl implements UserUpdateService {
+
+	// Set logger
+	private final Logger logger = LogManager.getLogger(this.getClass());
+
+	// Get class name for logger
+	private final String className = this.getClass().toString();
+	
+	@Value("${fileUpload.rootPath}")
+	private String rootPath;
+
+	@Value("${fileUpload.virtualRootPath}")
+	private String virtualRootPath;
+
+	@Value("${fileUpload.roomimage}")
+	private String roomimage;
+
+	@Autowired
+	UserUpdateDao userUpdateDao;
+	
+	// 학생정보 단건 조회
+	@Override
+	public UserUpdateModel userUpdateList(Map<String, Object> paramMap) throws Exception {
+		// TODO Auto-generated method stub
+		return userUpdateDao.userUpdateList(paramMap);
+	}
+	
+	// 개인정보 수정
+	@Override
+	public int studentUpdate(Map<String, Object> paramMap) throws Exception {
+		// TODO Auto-generated method stub
+		return userUpdateDao.studentUpdate(paramMap);
+	}
+
+}

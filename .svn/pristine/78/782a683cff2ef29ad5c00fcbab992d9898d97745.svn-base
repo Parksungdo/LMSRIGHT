@@ -1,0 +1,50 @@
+package kr.happyjob.study.adm.model;
+
+public class RoomModel {
+	
+	private String room_name;    //호실(강의실이름)
+	private String number;    //순번(강의실번호)
+	private int lecture_no;    //강의번호
+	private String room_person;    // 자리수
+	private String loginID;    //강사
+	private String room_status; //강의실 사용유무
+	
+	
+	
+	public String getNumber() {
+		return number;
+	}
+	public void setNumber(String number) {
+		this.number = number;
+	}
+	public int getLecture_no() {
+		return lecture_no;
+	}
+	public void setLecture_no(int lecture_no) {
+		this.lecture_no = lecture_no;
+	}
+	public String getRoom_person() {
+		return room_person;
+	}
+	public void setRoom_person(String room_person) {
+		this.room_person = room_person;
+	}
+	public String getLoginID() {
+		return loginID;
+	}
+	public void setLoginID(String loginID) {
+		this.loginID = loginID;
+	}
+	public String getRoom_status() {
+		return room_status;
+	}
+	public void setRoom_status(String room_status) {
+		this.room_status = room_status;
+	}
+	public String getRoom_name() {
+		return room_name;
+	}
+	public void setRoom_name(String room_name) {
+		this.room_name = room_name;
+	}
+}

@@ -1,0 +1,77 @@
+package kr.happyjob.study.adm.model;
+
+import java.util.Date;
+
+public class SurveyModel {
+	
+	// 설문조사 강사 목록 
+	private String loginID;
+	private String name;
+	private String user_hp;
+	private String user_email;
+	private String user_regdate;
+	private String user_address;
+	
+	// 설문조사 강의 목록
+	private String lecture_name;
+	private String lecture_start;
+	private String lecture_end;
+	
+	
+	public String getLoginID() {
+		return loginID;
+	}
+	public void setLoginID(String loginID) {
+		this.loginID = loginID;
+	}
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+	public String getUser_hp() {
+		return user_hp;
+	}
+	public void setUser_hp(String user_hp) {
+		this.user_hp = user_hp;
+	}
+	public String getUser_email() {
+		return user_email;
+	}
+	public void setUser_email(String user_email) {
+		this.user_email = user_email;
+	}
+	public String getUser_regdate() {
+		return user_regdate;
+	}
+	public void setUser_regdate(String user_regdate) {
+		this.user_regdate = user_regdate;
+	}
+	public String getUser_address() {
+		return user_address;
+	}
+	public void setUser_address(String user_address) {
+		this.user_address = user_address;
+	}
+	public String getLecture_name() {
+		return lecture_name;
+	}
+	public void setLecture_name(String lecture_name) {
+		this.lecture_name = lecture_name;
+	}
+	public String getLecture_start() {
+		return lecture_start;
+	}
+	public void setLecture_start(String lecture_start) {
+		this.lecture_start = lecture_start;
+	}
+	public String getLecture_end() {
+		return lecture_end;
+	}
+	public void setLecture_end(String lecture_end) {
+		this.lecture_end = lecture_end;
+	}
+	
+	
+}

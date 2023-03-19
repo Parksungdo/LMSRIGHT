@@ -1,0 +1,29 @@
+package kr.happyjob.study.std.dao;
+
+import java.util.List;
+import java.util.Map;
+
+
+import kr.happyjob.study.std.model.CourseInfoModel;
+import kr.happyjob.study.std.model.TaskListModel;
+import kr.happyjob.study.std.model.TaskModel;
+
+public interface  TaskSendDao {
+
+	 
+	/* 수강내역*/
+	public List<CourseInfoModel> lectureList(Map<String, Object> paramMap) throws Exception;
+	
+	/* 수강내역수 */
+	public int lectureListCnt(Map<String, Object> paramMap)  throws Exception;
+
+	/* 주차별 과제 목록 */
+	public List<TaskListModel>taskList(Map<String, Object> paramMap)  throws Exception;
+	
+	/*  주차별 과제 목록  수 */
+	public int taskListCnt(Map<String, Object> paramMap) throws Exception;
+	
+	/* 과제 내용 조회 */
+	public TaskModel taskContent(Map<String, Object> paramMap) throws Exception;
+
+}

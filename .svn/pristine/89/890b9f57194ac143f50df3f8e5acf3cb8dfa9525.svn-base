@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.happyjob.study.adm.dao.SurveyDao">
+
+	<!-- 설문조사 강사 목록 조회 -->
+	<select id="surveyTeacherList" resultType="kr.happyjob.study.adm.model.SurveyModel">
+		/*kr.happyjob.study.adm.dao.SurveyDao.surveyTeacherList*/
+		select  loginID
+     		  , name
+      		  , user_hp
+      		  , user_email
+     		  , SUBSTRING(user_regdate,1,10) as user_regdate
+ 		 from tb_userinfo
+    		
+    	<where>
+    		<if test="(search != null) and (!search.equals(''))">
+				and name LIKE CONCAT('%', #{search}, '%')
+			</if>
+			and user_type = 'b'
+    	</where>
+		
+		ORDER BY loginID DESC
+		LIMIT #{startPage}, #{pageSize}
+	</select>
+	
+	<!-- 설문조사 강사 목록 조회수 -->
+	<select id="surveyTeacherListCnt" resultType="int">
+		/*kr.happyjob.study.adm.dao.SurveyDao.surveyTeacherListCnt*/
+		select  count(*)
+ 		 from tb_userinfo
+    		where user_type = 'B'
+		
+	</select>
+	
+	<!-- 설문조사 강의 목록 조회 -->
+	<select id="surveyLectureList" resultType="kr.happyjob.study.adm.model.SurveyModel">
+		select    lc.lecture_name
+        		, ui.name
+       			, lc.lecture_start
+       			, lc.lecture_end
+  		from tb_lecture lc
+   		 inner join tb_userinfo ui ON ui.loginID = lc.loginID
+   		 
+   		<where>
+   			<if test="(lsearch != null) and (!lsearch.equals(''))">
+   				and lc.lecture_name LIKE CONCAT('%', #{lsearch}, '%')
+   			</if>
+   			and lc.loginID = #{loginID}
+   		</where>
+   		 
+   		ORDER BY lecture_name DESC
+		LIMIT #{startPage}, #{pageSize}
+	</select>
+	
+	<!-- 설문조사 강의 목록 조회수 -->
+	<select id="surveyLectureListCnt" resultType="int">
+		select count(*) 
+		from tb_lecture lc
+   		 inner join tb_userinfo ui ON ui.loginID = lc.loginID
+   		where lc.loginID = #{loginID}
+	</select>
+	
+</mapper>

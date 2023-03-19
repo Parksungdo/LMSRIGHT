@@ -1,0 +1,21 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>					
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+		
+		<c:if test="${totalCnt eq 0 }">
+			<tr>
+				<td colspan="7">데이터가 없습니다.</td>
+			</tr>
+		</c:if>
+		<c:if test="${totalCnt > 0 }">
+		<c:forEach items="${taskList}" var = "list">
+			<tr>
+				<td>${list.taskNo}</td>
+				<td><a href="javascript:fn_taskDetail('${list.taskNo}');">${list.taskTitle}</td>
+				<td>${list.taskStart}</td>
+				<td>${list.taskEnd}</td>
+				<td><a href="javascript:fn_taskSendInfo('${list.taskNo}');">자세히 보기</td>
+		</c:forEach> 
+		</c:if>
+		<input type="hidden" id="totalcnt" name="totalcnt" value ="${totalCnt}"/>

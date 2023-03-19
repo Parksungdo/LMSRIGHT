@@ -1,0 +1,63 @@
+package kr.happyjob.study.tut.model;
+
+public class WeekPlanListModel {
+	
+	private int plan_no;           //계획번호
+	private int lecture_no;        //강의번호
+	private String loginID;        //사용자ID
+	private String plan_week;      //주차
+	private String plan_goal;      //학습목표
+	private String plan_content;   //학습내용
+	private String plan_start;     //시작날짜
+	private String plan_end;       //종료날짜
+	
+	public int getPlan_no() {
+		return plan_no;
+	}
+	public void setPlan_no(int plan_no) {
+		this.plan_no = plan_no;
+	}
+	public int getLecture_no() {
+		return lecture_no;
+	}
+	public void setLecture_no(int lecture_no) {
+		this.lecture_no = lecture_no;
+	}
+	public String getLoginID() {
+		return loginID;
+	}
+	public void setLoginID(String loginID) {
+		this.loginID = loginID;
+	}
+	public String getPlan_week() {
+		return plan_week;
+	}
+	public void setPlan_week(String plan_week) {
+		this.plan_week = plan_week;
+	}
+	public String getPlan_goal() {
+		return plan_goal;
+	}
+	public void setPlan_goal(String plan_goal) {
+		this.plan_goal = plan_goal;
+	}
+	public String getPlan_content() {
+		return plan_content;
+	}
+	public void setPlan_content(String plan_content) {
+		this.plan_content = plan_content;
+	}
+	public String getPlan_start() {
+		return plan_start;
+	}
+	public void setPlan_start(String plan_start) {
+		this.plan_start = plan_start;
+	}
+	public String getPlan_end() {
+		return plan_end;
+	}
+	public void setPlan_end(String plan_end) {
+		this.plan_end = plan_end;
+	}
+	
+}

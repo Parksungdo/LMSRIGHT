@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.happyjob.study.adm.dao.RoomDao">
+	
+	<select id="roomList" resultType="kr.happyjob.study.adm.model.RoomModel" >
+		SELECT
+			 rm.number
+			 ,dc.detail_name as room_name
+			,rm.lecture_no
+			,rm.room_person
+			,rm.loginID
+			,rm.room_status
+		FROM tb_room rm 
+			inner join tb_detail_code dc on dc.group_code = 'number' and dc.detail_code = rm.number
+			<where>
+				<if test="(stype != null) and (!stype.equals(''))">
+					<choose>
+						<when test="stype eq 'rmnumber'.toString()">
+							AND rm.number LIKE CONCAT('%', #{sword}, '%')
+						</when>
+						<when test="stype eq 'rmname'.toString()">
+							AND dc.detail_name LIKE CONCAT('%', #{sword}, '%')
+						</when>
+						<when test="stype eq 'teacher'.toString()">
+							AND rm.loginID LIKE CONCAT('%', #{sword}, '%')
+						</when>
+						<otherwise>
+							and ( rm.number LIKE CONCAT('%', #{sword}, '%')
+							or dc.detail_name LIKE CONCAT('%', #{sword}, '%')
+							or rm.loginID LIKE CONCAT('%', #{sword}, '%') )
+						</otherwise>
+					</choose>
+				</if>
+		</where>
+		ORDER BY number DESC
+		LIMIT #{startnum},#{pageSize}
+		
+	</select>
+	
+	<select id="roomListCnt" resultType="int">
+		/*kr.happyjob.study.adm.dao.RoomDao.roomListCnt*/
+		SELECT	count(*)
+		FROM	tb_room rm
+            inner join tb_detail_code dc on dc.group_code = 'number' and dc.detail_code = rm.number
+			<where>
+				<if test="(stype != null) and (!stype.equals(''))">
+					<choose>
+						<when test="stype eq 'rmnumber'.toString()">
+							AND rm.number LIKE CONCAT('%', #{sword}, '%')
+						</when>
+						<when test="stype eq 'rmname'.toString()">
+							AND dc.detail_name LIKE CONCAT('%', #{sword}, '%')
+						</when>
+						<when test="stype eq 'teacher'.toString()">
+							AND rm.loginID LIKE CONCAT('%', #{sword}, '%')
+						</when>
+						<otherwise>
+							and ( rm.number LIKE CONCAT('%', #{sword}, '%')
+							or dc.detail_name LIKE CONCAT('%', #{sword}, '%')
+							or rm.loginID LIKE CONCAT('%', #{sword}, '%') )
+						</otherwise>
+					</choose>
+				</if>
+		</where>
+	</select>
+	<select id ="roomDetail" resultType="kr.happyjob.study.adm.model.RoomModel">
+		/*kr.happyjob.study.adm.dao.RoomDao.roomDetail*/
+		SELECT  rm.number
+		 	,dc.detail_name as room_name
+			,rm.lecture_no
+			,rm.room_person
+			,rm.loginID
+			,rm.room_status
+		FROM tb_room rm
+			inner join tb_detail_code dc on dc.group_code = 'number' and dc.detail_code = rm.number
+		WHERE number = #{number}
+	</select>
+	<insert id="roomInsert">
+		INSERT INTO tb_room
+				(
+					number
+				   ,room_person		   
+				   ,room_status
+				) VALUES (
+					#{number}
+				   ,#{room_person}
+				   ,#{room_status}				   
+				)
+	</insert>
+	<update id="roomUpdate">
+			UPDATE tb_room
+				SET room_person = #{room_person}
+					, room_status =#{room_status}
+			WHERE number = #{number}
+	</update>
+	
+	<delete id="roomDelete">
+			DELETE FROM tb_room
+			WHERE number = #{number}
+	</delete>
+	<!-- 장비목록 조회 -->
+	<select id="itemList" resultType="kr.happyjob.study.adm.model.ItemModel">
+	/*kr.happyjob.study.adm.dao.RoomDao.itemList*/
+			SELECT number
+					   ,item_no
+					   ,item_name
+					   ,item_volume
+					   ,item_note
+			FROM tb_item
+			WHERE number = #{number}
+			ORDER BY item_no DESC
+      		LIMIT #{startnum}, #{pageSize}
+	</select>
+	<!-- 장비목록 총 갯수 조회 -->
+	<select id="itemListCnt" resultType="int">
+	/*kr.happyjob.study.adm.dao.RoomDao.itemListCnt*/
+		SELECT	count(*)
+		FROM	tb_item
+        where number= #{number}
+	</select>
+	<!-- 장비상세조회 -->
+	<select id="itemDetail" resultType="kr.happyjob.study.adm.model.ItemModel">
+	/*kr.happyjob.study.adm.dao.RoomDao.itemDetail*/
+		SELECT item_no	
+			     ,number
+				 ,item_volume
+				 ,item_note
+				 ,item_name
+		FROM	tb_item
+         where number = #{number}
+         	AND item_no=#{item_no}
+	</select>
+	<insert id="itemInsert" >
+		<selectKey resultType="int" keyProperty="newitemreg" order="BEFORE">
+			SELECT ifnull(max(item_no),0) + 1 FROM tb_item;
+		</selectKey>
+		INSERT INTO tb_item
+			(
+				 item_no
+				,number
+				,item_name
+				,item_volume				
+				,item_note
+					
+			)VALUES(
+				 #{newitemreg}
+				,#{number}
+				,#{item_name}
+				,#{item_volume}
+				,#{item_note}
+			)
+	</insert>
+	
+	<update id="itemUpdate">
+			UPDATE tb_item
+					SET item_name = #{item_name}
+						  ,item_volume =  #{item_volume}
+						  ,item_note= #{item_note}
+				WHERE item_no =#{item_no}
+					AND number=#{number}
+	</update>
+	<delete id="itemDelete">
+			DELETE FROM tb_item 
+				WHERE item_no =#{item_no}
+					AND number=#{number}
+	</delete>
+</mapper>
